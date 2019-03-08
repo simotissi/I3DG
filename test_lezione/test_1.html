@@ -13,7 +13,8 @@
         <script>
             var scene, camera, renderer;
             var geometry, material;
-            var cube;
+            var offset = 3;
+            var cube = [];
 
             function Init(){
                 scene = new THREE.Scene();
@@ -26,14 +27,18 @@
 
                 geometry = new THREE.CubeGeometry(1,1,1);
                 material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-                cube = new THREE.Mesh( geometry, material );
-                scene.add(cube);
-                cube.position.set(2,0,0);
-                camera.position.set(0,0,5);
+                for(var i=0;i<3;i++){
+                    cube.push(new THREE.Mesh(geometry, material));
+                    cube[i].position.y = (offset*i) - 3;
+                    scene.add(cube[i]);
+                }
+                camera.position.set(0,0,8);
             }
 
             function Render(){
                 requestAnimationFrame( Render );
+                cube[1].rotation.x+=0.01;
+                cube[2].rotation.y+=0.01;
 				renderer.render( scene, camera );
             }
 
