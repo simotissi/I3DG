@@ -28,14 +28,9 @@
 
                 geometry = new THREE.CubeGeometry(1,1,1);
                 material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-                //cube = new THREE.Mesh( geometry, material );
-                //scene.add(cube);
-                //cube.position.set(2,0,0);
-                for(i=0; i<3; i++){
-                    cubes.push(new THREE.Mesh( geometry, material ));
-                    scene.add(cubes[0]);
-                    cubes[i].position.set(0, (i=0) ? (i-3) : (i+3), 0);
-                }
+                cube = new THREE.Mesh( geometry, material );
+                scene.add(cube);
+                cube.position.set(2,0,0);
                 camera.position.set(0,0,5);
             }
 
