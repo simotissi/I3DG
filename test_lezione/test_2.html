@@ -10,35 +10,35 @@
     </head>
     <body>
         <script src="lib/three.js"></script>
+        <script src="lib/stats.min.js"></script>
         <script>
-            var scene, camera, renderer;
-            var geometry, material;
-            var offset = 3;
-            var cube = [];
+            var scene, camera, renderer, stats, triangle;
 
             function Init(){
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-                                            // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize( window.innerWidth, window.innerHeight );
-                        //do la grandezza dell'immagine da renderizzare
                 document.body.appendChild( renderer.domElement );
 
-                geometry = new THREE.CubeGeometry(1,1,1);
-                material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-                for(var i=0;i<3;i++){
-                    cube.push(new THREE.Mesh(geometry, material));
-                    cube[i].position.y = (offset*i) - 3;
-                    scene.add(cube[i]);
-                }
-                camera.position.set(0,0,8);
+                material = new THREE.MeshBasicMaterial({
+                    color: 0xff0000,
+                    side: THREE.FrontSide
+                });
+                geometry = new THREE.Geometry();
+                geometry.vertices.push(new THREE.Vector3(-2, 0, 0)); // vettori a tre componenti: Vector3
+                geometry.vertices.push(new THREE.Vector3(2, 0, 0));
+                geometry.vertices.push(new THREE.Vector3(0, 2, 0));
+                geometry.faces.push(new THREE.Face3(0, 1, 2)); 
+                
+                triangle = new THREE.Mesh(geometry, material);
+                
+                scene.add(triangle);
+                camera.position.set(0,0,5);
             }
 
             function Render(){
                 requestAnimationFrame( Render );
-                cube[1].rotation.x+=0.01;
-                cube[2].rotation.y+=0.01;
 				renderer.render( scene, camera );
             }
 
