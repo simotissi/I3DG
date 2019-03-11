@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>My first Three.js app</title>
+        <style>
+            canvas { 
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="lib/three.js"></script>
+        <script>
+            var scene, camera, renderer;
+            var geometry, material;
+            var offset = 3;
+            var cube = [];
+
+            function Init(){
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+                                            // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                        //do la grandezza dell'immagine da renderizzare
+                document.body.appendChild( renderer.domElement );
+
+                geometry = new THREE.CubeGeometry(1,1,1);
+                material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+                for(var i=0;i<3;i++){
+                    cube.push(new THREE.Mesh(geometry, material));
+                    cube[i].position.y = (offset*i) - 3;
+                    scene.add(cube[i]);
+                }
+                camera.position.set(0,0,8);
+            }
+
+            function Render(){
+                requestAnimationFrame( Render );
+                cube[1].rotation.x+=0.01;
+                cube[2].rotation.y+=0.01;
+				renderer.render( scene, camera );
+            }
+
+            Init();
+            Render();
+        </script>
+    </body>
+</html>
