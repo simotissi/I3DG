@@ -10,9 +10,8 @@
     </head>
     <body>
         <script src="lib/three.js"></script>
-        <script src="lib/stats.min.js"></script>
         <script>
-            var scene, camera, renderer, stats, triangle;
+            var scene, camera, renderer, triangle;
 
             function Init(){
                 scene = new THREE.Scene();
@@ -29,6 +28,7 @@
                 geometry.vertices.push(new THREE.Vector3(-2, 0, 0)); // vettori a tre componenti: Vector3
                 geometry.vertices.push(new THREE.Vector3(2, 0, 0));
                 geometry.vertices.push(new THREE.Vector3(0, 2, 0));
+
                 geometry.faces.push(new THREE.Face3(0, 1, 2)); 
                 
                 triangle = new THREE.Mesh(geometry, material);
