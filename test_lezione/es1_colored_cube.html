@@ -18,8 +18,23 @@
         <script src="lib/three.js"></script>
         <script src="lib/stats.min.js"></script>
         <script>
-            var stats, scene, camera, renderer, face_1;
-            var cube;
+            let stats, scene, camera, renderer;
+            let cubeMaterials = [ 
+                    new THREE.MeshBasicMaterial({color:0xff0000, side: THREE.FrontSide}),
+                    new THREE.MeshBasicMaterial({color:0x00ff00, side: THREE.FrontSide}), 
+                    new THREE.MeshBasicMaterial({color:0x0000ff, side: THREE.FrontSide}),
+                    new THREE.MeshBasicMaterial({color:0xffff00, side: THREE.FrontSide}), 
+                    new THREE.MeshBasicMaterial({color:0xff00ff, side: THREE.FrontSide}), 
+                    new THREE.MeshBasicMaterial({color:0x00ffff, side: THREE.FrontSide}), 
+                ]; 
+            let geometry1, geometry2, geometry3, geometry4, geometry5, geometry6;
+            let cube = [];
+            let vertex = [
+                new THREE.Vector3(-2, 2, 0),
+                new THREE.Vector3(-2, -2, 0),
+                new THREE.Vector3(2, -2, 0),
+                new THREE.Vector3(2, 2, 0)
+            ]
 
             function Init(){
                 scene = new THREE.Scene();
@@ -28,33 +43,40 @@
                 renderer.setSize( window.innerWidth, window.innerHeight );
                 document.body.appendChild( renderer.domElement );
 
-                geometry = new THREE.Geometry();
-
-                var geometry = new THREE.CubeGeometry(2,2,2);
-                var cubeMaterials = [ 
-                    new THREE.MeshBasicMaterial({color:0xff0000, side: THREE.FrontSide}),
-                    new THREE.MeshBasicMaterial({color:0x00ff00, side: THREE.FrontSide}), 
-                    new THREE.MeshBasicMaterial({color:0x0000ff, side: THREE.FrontSide}),
-                    new THREE.MeshBasicMaterial({color:0xffff00, side: THREE.FrontSide}), 
-                    new THREE.MeshBasicMaterial({color:0xff00ff, side: THREE.FrontSide}), 
-                    new THREE.MeshBasicMaterial({color:0x00ffff, side: THREE.FrontSide}), 
-                ]; 
-                // Create a MeshFaceMaterial, which allows the cube to have different materials on each face ; 
-                cube = new THREE.Mesh(geometry, cubeMaterials);
-                scene.add( cube );
+                //FACCIA 1 - fronte rosso
+                geometry1 = new THREE.Geometry();
+                geometry1.vertices.push(vertex[0]); //0
+                geometry1.vertices.push(vertex[1]); //1 
+                geometry1.vertices.push(vertex[2]); //2
+                geometry1.vertices.push(vertex[3]); //3
+                geometry1.faces.push(new THREE.Face3(0, 1, 2));
+                geometry1.faces.push(new THREE.Face3(0, 2, 3));
+                cube.push(new THREE.Mesh(geometry1, cubeMaterials[0]));
                 
+                //FACCIA 2 - destro giallo
+
+                //FACCIA 3 - sinistro verde
+
+                //FACCIA 4 - sopra blu
+
+                //FACCIA 5 - sotto viola
+
+                //FACCIA 6 - dietro azzurro
+
+
+                cube.forEach(function(element) {
+                    scene.add(element);
+                });
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
                 document.body.appendChild( stats.domElement );
-                camera.position.set(0,0,5);
+                camera.position.set(0,0,8);
             }
 
             function Render(){
                 requestAnimationFrame( Render );
                 stats.update();
-                cube.rotation.x+=0.01;
-                cube.rotation.y+=0.01;
 				renderer.render( scene, camera );
             }
 
