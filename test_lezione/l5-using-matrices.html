@@ -27,6 +27,13 @@
 
 		var scene, camera, renderer, controls, stats;
 
+		//resize finestra
+		window.addEventListener('resize', function () {
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+		})
+
 		function Start() {
 			scene = new THREE.Scene();
 			camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -34,6 +41,7 @@
 			renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setClearColor( 0xf0f0f0 );
+
 			document.body.appendChild( renderer.domElement );
 
 			camera.position.set(3,4,6);
@@ -78,11 +86,6 @@
 			stats.domElement.style.position = 'absolute';
 			stats.domElement.style.top = '0px';
 			document.body.appendChild( stats.domElement );
-
-
-			
-
-
 
 		}
 
