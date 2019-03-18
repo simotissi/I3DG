@@ -29,13 +29,16 @@
                 ]; 
             let geometry1, geometry2, geometry3, geometry4, geometry5, geometry6;
             let cube = [];
-            let vertex = [
-                new THREE.Vector3(-2, 2, 0),
-                new THREE.Vector3(-2, -2, 0),
-                new THREE.Vector3(2, -2, 0),
-                new THREE.Vector3(2, 2, 0)
-            ]
-
+            let vertex = [] 
+            vertex.push(new THREE.Vector3(-2,2,0));   // 0 - alto sx front
+            vertex.push(new THREE.Vector3(-2,-2,0));  // 1 - basso sx front
+            vertex.push(new THREE.Vector3(2,-2,0));   // 2 - basso dx front
+            vertex.push(new THREE.Vector3(2,2,0));    // 3 - alto dx front
+            vertex.push(new THREE.Vector3(-2,2,-4));  // 4 - alto sx back 
+            vertex.push(new THREE.Vector3(-2,-2,-4)); // 5 - basso sx back
+            vertex.push(new THREE.Vector3(2,-2,-4));  // 6 - basso dx back
+            vertex.push(new THREE.Vector3(2,2,-4));   // 7 - alto dx back
+            
             function Init(){
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -43,26 +46,66 @@
                 renderer.setSize( window.innerWidth, window.innerHeight );
                 document.body.appendChild( renderer.domElement );
 
-                //FACCIA 1 - fronte rosso
+                //FACCIA 1 - fronte 
                 geometry1 = new THREE.Geometry();
-                geometry1.vertices.push(vertex[0]); //0
-                geometry1.vertices.push(vertex[1]); //1 
-                geometry1.vertices.push(vertex[2]); //2
-                geometry1.vertices.push(vertex[3]); //3
+                geometry1.vertices.push(vertex[3]);
+                geometry1.vertices.push(vertex[0]);
+                geometry1.vertices.push(vertex[1]);
+                geometry1.vertices.push(vertex[2]);
                 geometry1.faces.push(new THREE.Face3(0, 1, 2));
                 geometry1.faces.push(new THREE.Face3(0, 2, 3));
                 cube.push(new THREE.Mesh(geometry1, cubeMaterials[0]));
                 
-                //FACCIA 2 - destro giallo
+                //FACCIA 2 - destro
+                geometry2 = new THREE.Geometry();
+                geometry2.vertices.push(vertex[7]);
+                geometry2.vertices.push(vertex[3]);
+                geometry2.vertices.push(vertex[2]);
+                geometry2.vertices.push(vertex[6]);
+                geometry2.faces.push(new THREE.Face3(0,1,2));
+                geometry2.faces.push(new THREE.Face3(0,2,3));
+                cube.push(new THREE.Mesh(geometry2, cubeMaterials[1]));
 
-                //FACCIA 3 - sinistro verde
+                //FACCIA 3 - sinistro
+                geometry3 = new THREE.Geometry();
+                geometry3.vertices.push(vertex[0]);
+                geometry3.vertices.push(vertex[4]);
+                geometry3.vertices.push(vertex[5]);
+                geometry3.vertices.push(vertex[1]);
+                geometry3.faces.push(new THREE.Face3(0,1,2));
+                geometry3.faces.push(new THREE.Face3(0,2,3));
+                cube.push(new THREE.Mesh(geometry3, cubeMaterials[2]));
+                
+                //FACCIA 4 - sopra
+                geometry4 = new THREE.Geometry();
+                geometry4.vertices.push(vertex[7]);
+                geometry4.vertices.push(vertex[4]);
+                geometry4.vertices.push(vertex[0]);
+                geometry4.vertices.push(vertex[3]);
+                geometry4.faces.push(new THREE.Face3(0,1,2));
+                geometry4.faces.push(new THREE.Face3(0,2,3));
+                cube.push(new THREE.Mesh(geometry4, cubeMaterials[3]));
 
-                //FACCIA 4 - sopra blu
+                //FACCIA 5 - sotto  
+                geometry5 = new THREE.Geometry();
+                geometry5.vertices.push(vertex[2]);
+                geometry5.vertices.push(vertex[1]);
+                geometry5.vertices.push(vertex[5]);
+                geometry5.vertices.push(vertex[6]);
+                geometry5.faces.push(new THREE.Face3(0,1,2));
+                geometry5.faces.push(new THREE.Face3(0,2,3));
+                cube.push(new THREE.Mesh(geometry5, cubeMaterials[4]));
 
-                //FACCIA 5 - sotto viola
-
-                //FACCIA 6 - dietro azzurro
-
+                //FACCIA 6 - dietro 
+                geometry6 = new THREE.Geometry();
+                geometry6.vertices.push(vertex[4]);
+                geometry6.vertices.push(vertex[7]);
+                geometry6.vertices.push(vertex[6]);
+                geometry6.vertices.push(vertex[5]);
+                geometry6.faces.push(new THREE.Face3(0,1,2));
+                geometry6.faces.push(new THREE.Face3(0,2,3));
+                cube.push(new THREE.Mesh(geometry6, cubeMaterials[5]));
+                
 
                 cube.forEach(function(element) {
                     scene.add(element);
@@ -77,6 +120,8 @@
             function Render(){
                 requestAnimationFrame( Render );
                 stats.update();
+                scene.rotation.x+=0.01;
+                scene.rotation.y+=0.01;
 				renderer.render( scene, camera );
             }
 
