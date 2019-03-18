@@ -51,11 +51,11 @@
                 geometry_3 = new THREE.CylinderGeometry( 0, 0.4, 5, 32 );
                 material_3 = new THREE.MeshBasicMaterial( {color: "rgb(218,165,32)"} );
                 
-
+                let pivot
                 for(let i=0; i<n_petal; i++){
                     petal = new THREE.Mesh(geometry_3, material_3);
                     petal.position.set(0,-1.5,-4);
-                    let pivot = new THREE.Object3D();
+                    pivot = new THREE.Object3D();
                     scene.add(pivot);
                     pivot.rotation.z = (360/n_petal * Math.PI/180) * i;
                     pivot.rotation.x = 90 * Math.PI/180;
