@@ -7,7 +7,8 @@
                 background-color: #f0f0f0;
                 margin: 0px;
                 overflow: hidden;
-            }
+		    }
+
             canvas {
                 width: 100%;
                 height: 100%;
@@ -18,19 +19,23 @@
         <script src="lib/three.js"></script>
         <script src="lib/stats.min.js"></script>
         <script>
-            var scene, camera, renderer, stats;
-            var geometry, material, cube;
+            let scene, camera, renderer, stats;
+            let geometry_1, material_1, stem; 
+            let geometry_2, material_2, stamen; 
+            let geometry_3, material_3, petal; 
+            const n_petal = 20;
 
             function Init(){
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
                                             // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
                 renderer = new THREE.WebGLRenderer();
+                renderer.setClearColor( 0xf0f0f0 );
                 renderer.setSize( window.innerWidth, window.innerHeight );
                         //do la grandezza dell'immagine da renderizzare
                 document.body.appendChild( renderer.domElement );
 
-                
+                /*
                 geometry = new THREE.CubeGeometry(1,1,1);
                 material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
                 cube = new THREE.Mesh(geometry, material);
@@ -38,6 +43,36 @@
                 cube.rotation.z = 45 * Math.PI/180; //vedere da gradi a radianti: questo per ruotarlo di 45 gradi
                 cube.scale.set(2,2,2);
                 scene.add(cube);
+                */
+
+                //STEM
+                geometry_1 = new THREE.CylinderGeometry( 0.5, 0.5, 10, 32 );
+                material_1 = new THREE.MeshBasicMaterial( {color: "rgb(34,139,34)"} );
+                stem = new THREE.Mesh( geometry_1, material_1 );
+                stem.position.set(0,-1,0);
+                scene.add( stem );
+
+                //STAMEN
+                geometry_2 = new THREE.SphereGeometry( 0.8, 32, 32 );
+                material_2 = new THREE.MeshBasicMaterial( {color: "rgb(0,0,0)"} );
+                stamen = new THREE.Mesh( geometry_2, material_2 );
+                stamen.position.set(0,4,0);
+                scene.add( stamen );
+
+                //PETAL
+                geometry_3 = new THREE.CylinderGeometry( 0, 0.4, 5, 32 );
+                material_3 = new THREE.MeshBasicMaterial( {color: "rgb(218,165,32)"} );
+                
+
+                for(let i=0; i<n_petal; i++){
+                    petal = new THREE.Mesh(geometry_3, material_3);
+                    petal.position.set(0,-1.5,-4);
+                    let pivot = new THREE.Object3D();
+                    scene.add(pivot);
+                    pivot.rotation.z = (360/n_petal * Math.PI/180) * i;
+                    pivot.rotation.x = 90 * Math.PI/180;
+                    pivot.add( petal );
+                }
 
 
                 
@@ -45,12 +80,16 @@
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
                 document.body.appendChild( stats.domElement );
-                camera.position.set(0,0,5);
+                camera.position.z = 30;
+				camera.position.y = 8;
             }
 
             function Render(){
                 requestAnimationFrame( Render );
                 stats.update();
+                scene.rotation.y+=0.01;
+                scene.rotation.x+=0.01;
+                scene.rotation.z+=0.01;
 				renderer.render( scene, camera );
             }
 
