@@ -54,19 +54,22 @@
 
 			var cylinder = new THREE.Mesh(cylinder_geometry, cylinder_material);
 
+			//Ricavo angolo di rotazione:
 			var maxCorner = new THREE.Vector3(-1,1,1);
 			var minCorner = new THREE.Vector3(1,-1,-1);
 			var rotatedCyl_axis = new THREE.Vector3();
-			rotatedCyl_axis.subVectors(maxCorner, minCorner);
+			rotatedCyl_axis.subVectors(maxCorner, minCorner); 
 			rotatedCyl_axis.normalize();
 			var angle = Math.acos( rotatedCyl_axis.dot( new THREE.Vector3(0,1,0)) );
 
+			//Ricavo asse di rotazione:
 			var rotationAxis = new THREE.Vector3();
 			rotationAxis.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis);
 			rotationAxis.normalize();
 
 			console.log(rotationAxis);
 
+			//Creo rotazione
 			cylinder.matrix.makeRotationAxis( rotationAxis, angle);
 			cylinder.matrixAutoUpdate = false;
 			scene.add( cylinder );
