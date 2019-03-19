@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <title>Solar System</title>
+        <style>
+            body {
+                font-family: Monospace;
+                background-color: #f0f0f0;
+                margin: 0px;
+                overflow: hidden;
+            }
+            canvas {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../lib/three.js"></script>
+        <script src="../lib/stats.min.js"></script>
+        <script src="../lib/Coordinates.js"></script>
+        <script src="../lib/OrbitControls.js"></script>
+        <script src="/support_function.js"></script>
+        <script>
+            /*
+                - Develop a web application that visualizes a solar system with:
+                    ▸ a central sun (not rotating)
+                    ▸ a planet revolving around the sun every 365 days, and, in addition, rotating
+                      about an axis which is tipped over about 25 degrees from its vertical axis,
+                      once per day
+                    ▸ a moon revolving around the planet 12 times per year, and rotating around
+                      its vertical axis;
+                - Use wireframe spheres of different colours for the sun, the planet and the moon. 
+                  To make animations visible, suppose a year will last 365 seconds. You can use
+                  the javascript Date.now() method that returns the number of milliseconds
+                  elapsed since 1 January 1970 00:00:00 UTC.
+            */
+
+            let scene, camera, renderer, stats, controls;
+            let g_sun, g_planet, g_moon;
+            let m_sun, m_planet, m_moon;
+            let sun, planet, moon;
+            let pivot_planet;
+
+            //resize finestra
+            window.addEventListener('resize', function () {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+            });
+
+
+            function Init(){
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+                                            // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
+                renderer = new THREE.WebGLRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                        //do la grandezza dell'immagine da renderizzare
+                renderer.setClearColor( 0xf0f0f0 );
+                document.body.appendChild( renderer.domElement );
+                controls = new THREE.OrbitControls( camera ); // navigazione con mouse
+
+
+                //SOLE CENTRALE CHE NON RUOTA
+                g_sun = new THREE.SphereGeometry( 5, 16, 16 );
+                m_sun = new THREE.MeshBasicMaterial( {color: "rgb(255,127,80)", wireframe: true} );
+                sun = new THREE.Mesh( g_sun, m_sun );
+                scene.add( sun );
+                
+                //PIANETA CHE RUOTA SU SE STESSO E INTORNO A UN SUO ASSE
+                g_planet = new THREE.SphereGeometry(3, 16, 16);
+                m_planet = new THREE.MeshBasicMaterial({color: "rgb(85,107,47)", wireframe: true})
+                pivot_planet = new THREE.Object3D();
+                setInterval(PlanetRevolving(pivot_planet), 1000);
+                scene.add(pivot_planet);
+                planet = new THREE.Mesh(g_planet, m_planet);
+                planet.position.x = -10;
+                pivot_planet.add(planet);
+
+                
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.top = '0px';
+                document.body.appendChild( stats.domElement );
+                camera.position.set(0,0,30);
+            }
+
+            function Render(){
+                requestAnimationFrame( Render );
+                stats.update();
+				renderer.render( scene, camera );
+            }
+
+            Init();
+            Render();
+        </script>
+    </body>
+</html>
