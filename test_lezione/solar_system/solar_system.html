@@ -19,7 +19,7 @@
         <script src="../lib/stats.min.js"></script>
         <script src="../lib/Coordinates.js"></script>
         <script src="../lib/OrbitControls.js"></script>
-        <script src="/support_function.js"></script>
+        <script src="support_function.js"></script>
         <script>
             /*
                 - Develop a web application that visualizes a solar system with:
@@ -39,7 +39,8 @@
             let g_sun, g_planet, g_moon;
             let m_sun, m_planet, m_moon;
             let sun, planet, moon;
-            let pivot_planet;
+            let pivot_planet, pivot_planet_2;
+            let t_old = Date.now()/1000;
 
             //resize finestra
             window.addEventListener('resize', function () {
@@ -62,32 +63,63 @@
 
 
                 //SOLE CENTRALE CHE NON RUOTA
-                g_sun = new THREE.SphereGeometry( 5, 16, 16 );
+                g_sun = new THREE.SphereGeometry( 50, 16, 16 );
                 m_sun = new THREE.MeshBasicMaterial( {color: "rgb(255,127,80)", wireframe: true} );
                 sun = new THREE.Mesh( g_sun, m_sun );
                 scene.add( sun );
                 
                 //PIANETA CHE RUOTA SU SE STESSO E INTORNO A UN SUO ASSE
-                g_planet = new THREE.SphereGeometry(3, 16, 16);
+                g_planet = new THREE.SphereGeometry(20, 8, 8);
                 m_planet = new THREE.MeshBasicMaterial({color: "rgb(85,107,47)", wireframe: true})
                 pivot_planet = new THREE.Object3D();
-                setInterval(PlanetRevolving(pivot_planet), 1000);
+                //setInterval(PlanetRevolving(pivot_planet), 1000);
                 scene.add(pivot_planet);
                 planet = new THREE.Mesh(g_planet, m_planet);
-                planet.position.x = -10;
-                pivot_planet.add(planet);
+                planet.position.x = -100;
+                /*
+                //Ricavo angolo di rotazione:
+                let minCorner = new THREE.Vector3(-3, -(g_planet.parameters.radius), g_planet.parameters.radius);
+                let maxCorner = new THREE.Vector3(3, g_planet.parameters.radius, -(g_planet.parameters.radius));
+                let rotatedPlanet_axis = new THREE.Vector3();
+                rotatedPlanet_axis.subVectors(maxCorner, minCorner); 
+                rotatedPlanet_axis.normalize();
+                var angle = Math.acos( rotatedPlanet_axis.dot( new THREE.Vector3(0,1,0)) );
 
+                //Ricavo asse di rotazione:
+                var rotationAxis = new THREE.Vector3();
+                rotationAxis.crossVectors(new THREE.Vector3(0,1,0), rotatedPlanet_axis);
+                rotationAxis.normalize();
+
+                //Creo rotazione
+                planet.matrix.makeRotationAxis( rotationAxis, angle);
+                planet.matrixAutoUpdate = false;
+                
+                
+                var axis = new THREE.Vector3(0,0,1);
+                var theta = 25 * Math.PI / 180.0;
+                
+
+                planet.matrix.makeRotationAxis( axis, theta );
+                planet.matrixAutoUpdate = false;
+                */
+                pivot_planet.add(planet);
+                
                 
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
                 document.body.appendChild( stats.domElement );
-                camera.position.set(0,0,30);
+                camera.position.set(0,0,300);
             }
 
             function Render(){
                 requestAnimationFrame( Render );
                 stats.update();
+                t_now = Date.now()/1000;
+                let dt = t_now - t_old;
+                t_old = t_now;
+                PlanetRevolving(pivot_planet, dt);
+                //PlanetRotation(planet, dt);
 				renderer.render( scene, camera );
             }
 

@@ -1,3 +1,7 @@
-function PlanetRevolving(pivot){ 
-    pivot.rotation.z += (360/365 * Math.PI/180);
+function PlanetRevolving(pivot, delta){ 
+    pivot.rotation.y += (360 * Math.PI/180) * (delta / 365);
+}
+
+function PlanetRotation(planet, delta){ 
+    planet.rotation.y += (360 * Math.PI/180) * (delta);
 }
