@@ -35,11 +35,15 @@
                   elapsed since 1 January 1970 00:00:00 UTC.
             */
 
-            let scene, camera, renderer, stats, controls;
-            let g_sun, g_planet, g_moon;
-            let m_sun, m_planet, m_moon;
+            let scene, camera, renderer, stats, controls, start_time;
             let sun, planet, moon;
-            let pivot_planet, pivot_planet_2;
+            let planet_moon_container_1, planet_container, moon_container_1;
+            let moon_container_2, planet_moon_container_2;
+            let planet_inclination_axis = new THREE.Vector3(0,0,1);
+            let planet_rotation_axis = new THREE.Vector3(0,1,0);
+            let planet_moon_rotation_axis = new THREE.Vector3(0,1,0);
+            let moon_rotation_axis = new THREE.Vector3(0,1,0);
+            let moon_revolving_axis = new THREE.Vector3(0,1,0);
             let t_old = Date.now()/1000;
 
             //resize finestra
@@ -53,7 +57,8 @@
             function Init(){
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-                                            // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
+                          
+                let pivot_planet, pivot_planet_2;                  // (FOV in gradi, Aspect Ratio (larghezzafinestra/altezzafinestra), minDistanza per vedere gli elementi, maxDistanza)
                 renderer = new THREE.WebGLRenderer();
                 renderer.setSize( window.innerWidth, window.innerHeight );
                         //do la grandezza dell'immagine da renderizzare
@@ -62,64 +67,56 @@
                 controls = new THREE.OrbitControls( camera ); // navigazione con mouse
 
 
-                //SOLE CENTRALE CHE NON RUOTA
-                g_sun = new THREE.SphereGeometry( 50, 16, 16 );
-                m_sun = new THREE.MeshBasicMaterial( {color: "rgb(255,127,80)", wireframe: true} );
-                sun = new THREE.Mesh( g_sun, m_sun );
-                scene.add( sun );
+                sun = createSun(20, "rgb(255,140,0)");
+                scene.add(sun);
                 
-                //PIANETA CHE RUOTA SU SE STESSO E INTORNO A UN SUO ASSE
-                g_planet = new THREE.SphereGeometry(20, 8, 8);
-                m_planet = new THREE.MeshBasicMaterial({color: "rgb(85,107,47)", wireframe: true})
-                pivot_planet = new THREE.Object3D();
-                //setInterval(PlanetRevolving(pivot_planet), 1000);
-                scene.add(pivot_planet);
-                planet = new THREE.Mesh(g_planet, m_planet);
-                planet.position.x = -100;
-                /*
-                //Ricavo angolo di rotazione:
-                let minCorner = new THREE.Vector3(-3, -(g_planet.parameters.radius), g_planet.parameters.radius);
-                let maxCorner = new THREE.Vector3(3, g_planet.parameters.radius, -(g_planet.parameters.radius));
-                let rotatedPlanet_axis = new THREE.Vector3();
-                rotatedPlanet_axis.subVectors(maxCorner, minCorner); 
-                rotatedPlanet_axis.normalize();
-                var angle = Math.acos( rotatedPlanet_axis.dot( new THREE.Vector3(0,1,0)) );
+               
+                planet = createPlanet(8, "rgb(85,107,47)");
+                planet_moon_container_1 = new THREE.Object3D();
+                planet_moon_container_2 = new THREE.Object3D();
+                scene.add(planet_moon_container_1);
+                planet_moon_container_1.add(planet_moon_container_2)
+                planet_container = new THREE.Object3D();
+                planet_moon_container_2.add(planet_container);
+                planet_moon_container_2.position.x = 45;
+                planet_container.add(planet);
+                //inclinazione pianeta
+                planet_container.matrix.makeRotationAxis( planet_inclination_axis, -(25 * Math.PI / 180.0) );
+                planet_container.matrixAutoUpdate = false;
 
-                //Ricavo asse di rotazione:
-                var rotationAxis = new THREE.Vector3();
-                rotationAxis.crossVectors(new THREE.Vector3(0,1,0), rotatedPlanet_axis);
-                rotationAxis.normalize();
 
-                //Creo rotazione
-                planet.matrix.makeRotationAxis( rotationAxis, angle);
-                planet.matrixAutoUpdate = false;
-                
-                
-                var axis = new THREE.Vector3(0,0,1);
-                var theta = 25 * Math.PI / 180.0;
-                
-
-                planet.matrix.makeRotationAxis( axis, theta );
-                planet.matrixAutoUpdate = false;
-                */
-                pivot_planet.add(planet);
-                
+                moon = createMoon(2, "rgb(169,169,169)");
+                moon_container_1 = new THREE.Object3D();
+                moon_container_2 = new THREE.Object3D();
+                planet_moon_container_2.add(moon_container_1);
+                moon_container_1.add(moon_container_2);
+                moon_container_2.position.set(10, 5, 0);
+                moon_container_2.add(moon);
                 
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
                 document.body.appendChild( stats.domElement );
-                camera.position.set(0,0,300);
+                camera.position.set(0,0,100);
+                start_time = Date.now();
             }
 
             function Render(){
                 requestAnimationFrame( Render );
                 stats.update();
-                t_now = Date.now()/1000;
-                let dt = t_now - t_old;
-                t_old = t_now;
-                PlanetRevolving(pivot_planet, dt);
-                //PlanetRotation(planet, dt);
+                let dt = Date.now() - start_time;
+
+                planet_moon_container_1.matrix.makeRotationAxis(planet_moon_rotation_axis, mapping(dt % 365000, 0, 364999, 0, 2 * Math.PI));
+                planet_moon_container_1.matrixAutoUpdate = false;
+
+                moon_container_1.matrix.makeRotationAxis(moon_revolving_axis, mapping(dt % 30416, 0, 30415, 0, 2 * Math.PI));
+                moon_container_1.matrixAutoUpdate = false;
+
+                planet.matrix.makeRotationAxis(planet_rotation_axis, mapping(dt % 1000, 0, 999, 0, 2 * Math.PI));
+                planet.matrixAutoUpdate = false;
+
+                moon.matrix.makeRotationAxis(moon_rotation_axis, mapping(dt % 30416, 0, 30415, 0, 2 * Math.PI));
+                moon.matrixAutoUpdate = false;
 				renderer.render( scene, camera );
             }
 

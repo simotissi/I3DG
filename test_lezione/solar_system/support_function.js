@@ -1,7 +1,21 @@
-function PlanetRevolving(pivot, delta){ 
-    pivot.rotation.y += (360 * Math.PI/180) * (delta / 365);
+function mapping(value, istart, istop, ostart, ostop) {
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
+  }
+
+function createSun(radius, color_rgb){
+    let g_sun = new THREE.SphereGeometry( radius, 32, 32 );
+    let m_sun = new THREE.MeshBasicMaterial( {color: color_rgb, wireframe: true} );
+    return new THREE.Mesh( g_sun, m_sun );
 }
 
-function PlanetRotation(planet, delta){ 
-    planet.rotation.y += (360 * Math.PI/180) * (delta);
+function createPlanet(radius, color_rgb){
+    let g_planet = new THREE.SphereGeometry( radius, 32, 32 );
+    let m_planet = new THREE.MeshBasicMaterial( {color: color_rgb, wireframe: true} );
+    return new THREE.Mesh( g_planet, m_planet );
+}
+
+function createMoon(radius, color_rgb){
+    let g_moon = new THREE.SphereGeometry( radius, 32, 32 );
+    let m_moon = new THREE.MeshBasicMaterial( {color: color_rgb, wireframe: true} );
+    return new THREE.Mesh( g_moon, m_moon );
 }
