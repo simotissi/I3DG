@@ -80,13 +80,13 @@
                 planet_moon_container_2 = new THREE.Object3D();
                 scene.add(planet_moon_container_1);
                 planet_moon_container_1.add(planet_moon_container_2)
-                //planet conteiner for the inclination
+                //planet container for the inclination
                 planet_container = new THREE.Object3D();
                 planet_moon_container_2.add(planet_container);
                 //planet traslation from the sun
                 planet_moon_container_2.position.x = 50;
                 planet_container.add(planet);
-                //inclination of the planet conteiner
+                //inclination of the planet container
                 planet_container.matrix.makeRotationAxis( planet_inclination_axis, -(25 * Math.PI / 180.0) );
                 planet_container.matrixAutoUpdate = false;
 
