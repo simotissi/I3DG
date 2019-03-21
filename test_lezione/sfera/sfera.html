@@ -19,6 +19,7 @@
         <script src="../lib/stats.min.js"></script>
         <script src="../lib/Coordinates.js"></script>
         <script src="../lib/OrbitControls.js"></script>
+        <script src="support_functions.js"></script>
         <script>
             let stats, scene, camera, renderer;
             //resize finestra
@@ -82,6 +83,7 @@
                 octahedron.forEach(function(element) {
                     scene.add(element);
                 });
+                
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
