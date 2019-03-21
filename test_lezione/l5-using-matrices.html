@@ -60,27 +60,82 @@
 			var cylinder_geometry = new THREE.CylinderGeometry(0.5,0.5,5);
 			var cylinder_material = new THREE.MeshBasicMaterial( { color: 0xaaaaff });
 
-			var cylinder = new THREE.Mesh(cylinder_geometry, cylinder_material);
+			var cylinder_1 = new THREE.Mesh(cylinder_geometry, cylinder_material);
+			var cylinder_2 = new THREE.Mesh(cylinder_geometry, cylinder_material);
+			var cylinder_3 = new THREE.Mesh(cylinder_geometry, cylinder_material);
+			var cylinder_4 = new THREE.Mesh(cylinder_geometry, cylinder_material);
 
+			//CYLINDER 1
 			//Ricavo angolo di rotazione:
-			var maxCorner = new THREE.Vector3(-1,1,1);
-			var minCorner = new THREE.Vector3(1,-1,-1);
-			var rotatedCyl_axis = new THREE.Vector3();
-			rotatedCyl_axis.subVectors(maxCorner, minCorner); 
-			rotatedCyl_axis.normalize();
-			var angle = Math.acos( rotatedCyl_axis.dot( new THREE.Vector3(0,1,0)) );
-
+			var maxCorner_1 = new THREE.Vector3(-1,1,1);
+			var minCorner_1 = new THREE.Vector3(1,-1,-1);
+			var rotatedCyl_axis_1 = new THREE.Vector3();
+			rotatedCyl_axis_1.subVectors(maxCorner_1, minCorner_1); 
+			rotatedCyl_axis_1.normalize();
+			var angle_1 = Math.acos( rotatedCyl_axis_1.dot( new THREE.Vector3(0,1,0)) );
 			//Ricavo asse di rotazione:
-			var rotationAxis = new THREE.Vector3();
-			rotationAxis.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis);
-			rotationAxis.normalize();
-
-			console.log(rotationAxis);
-
+			var rotationAxis_1 = new THREE.Vector3();
+			rotationAxis_1.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis_1);
+			rotationAxis_1.normalize();
+			console.log(rotationAxis_1);
 			//Creo rotazione
-			cylinder.matrix.makeRotationAxis( rotationAxis, angle);
-			cylinder.matrixAutoUpdate = false;
-			scene.add( cylinder );
+			cylinder_1.matrix.makeRotationAxis( rotationAxis_1, angle_1);
+			cylinder_1.matrixAutoUpdate = false;
+			scene.add( cylinder_1 );
+
+			//CYLINDER 2
+			//Ricavo angolo di rotazione:
+			var maxCorner_2 = new THREE.Vector3(1,1,1);
+			var minCorner_2 = new THREE.Vector3(-1,-1,-1);
+			var rotatedCyl_axis_2 = new THREE.Vector3();
+			rotatedCyl_axis_2.subVectors(maxCorner_2, minCorner_2); 
+			rotatedCyl_axis_2.normalize();
+			var angle_2 = Math.acos( rotatedCyl_axis_2.dot( new THREE.Vector3(0,1,0)) );
+			//Ricavo asse di rotazione:
+			var rotationAxis_2 = new THREE.Vector3();
+			rotationAxis_2.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis_2);
+			rotationAxis_2.normalize();
+			console.log(rotationAxis_2);
+			//Creo rotazione
+			cylinder_2.matrix.makeRotationAxis( rotationAxis_2, angle_2);
+			cylinder_2.matrixAutoUpdate = false;
+			scene.add( cylinder_2 );
+
+			//CYLINDER 3
+			//Ricavo angolo di rotazione:
+			var maxCorner_3 = new THREE.Vector3(1,1,-1);
+			var minCorner_3 = new THREE.Vector3(-1,-1,1);
+			var rotatedCyl_axis_3 = new THREE.Vector3();
+			rotatedCyl_axis_3.subVectors(maxCorner_3, minCorner_3); 
+			rotatedCyl_axis_3.normalize();
+			var angle_3 = Math.acos( rotatedCyl_axis_3.dot( new THREE.Vector3(0,1,0)) );
+			//Ricavo asse di rotazione:
+			var rotationAxis_3 = new THREE.Vector3();
+			rotationAxis_3.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis_3);
+			rotationAxis_3.normalize();
+			console.log(rotationAxis_3);
+			//Creo rotazione
+			cylinder_3.matrix.makeRotationAxis( rotationAxis_3, angle_3);
+			cylinder_3.matrixAutoUpdate = false;
+			scene.add( cylinder_3 );
+
+			//CYLINDER 4
+			//Ricavo angolo di rotazione:
+			var maxCorner_4 = new THREE.Vector3(-1,1,-1);
+			var minCorner_4 = new THREE.Vector3(1,-1,1);
+			var rotatedCyl_axis_4 = new THREE.Vector3();
+			rotatedCyl_axis_4.subVectors(maxCorner_4, minCorner_4); 
+			rotatedCyl_axis_4.normalize();
+			var angle_4 = Math.acos( rotatedCyl_axis_4.dot( new THREE.Vector3(0,1,0)) );
+			//Ricavo asse di rotazione:
+			var rotationAxis_4 = new THREE.Vector3();
+			rotationAxis_4.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis_4);
+			rotationAxis_4.normalize();
+			console.log(rotationAxis_4);
+			//Creo rotazione
+			cylinder_4.matrix.makeRotationAxis( rotationAxis_4, angle_4);
+			cylinder_4.matrixAutoUpdate = false;
+			scene.add( cylinder_4 );
 
 			stats = new Stats();
 			stats.domElement.style.position = 'absolute';
