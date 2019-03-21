@@ -12,14 +12,14 @@ function createSun(radius, color_rgb){
 
 //function for the creation of the planet
 function createPlanet(radius, color_rgb){
-    let g_planet = new THREE.SphereGeometry( radius, 8, 8 );
+    let g_planet = new THREE.SphereGeometry( radius, 32, 32 );
     let m_planet = new THREE.MeshBasicMaterial( {color: color_rgb, wireframe: true} );
     return new THREE.Mesh( g_planet, m_planet );
 }
 
 //function for the creation of the moon
 function createMoon(radius, color_rgb){
-    let g_moon = new THREE.SphereGeometry( radius, 8, 8 );
+    let g_moon = new THREE.SphereGeometry( radius, 32, 32 );
     let m_moon = new THREE.MeshBasicMaterial( {color: color_rgb, wireframe: true} );
     return new THREE.Mesh( g_moon, m_moon );
 }
