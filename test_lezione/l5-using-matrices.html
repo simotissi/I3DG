@@ -66,14 +66,14 @@
 			var cylinder_4 = new THREE.Mesh(cylinder_geometry, cylinder_material);
 
 			//CYLINDER 1
-			//Ricavo angolo di rotazione:
+			//Ricavo angolo di rotazione
 			var maxCorner_1 = new THREE.Vector3(-1,1,1);
 			var minCorner_1 = new THREE.Vector3(1,-1,-1);
 			var rotatedCyl_axis_1 = new THREE.Vector3();
 			rotatedCyl_axis_1.subVectors(maxCorner_1, minCorner_1); 
 			rotatedCyl_axis_1.normalize();
 			var angle_1 = Math.acos( rotatedCyl_axis_1.dot( new THREE.Vector3(0,1,0)) );
-			//Ricavo asse di rotazione:
+			//Ricavo asse di rotazione
 			var rotationAxis_1 = new THREE.Vector3();
 			rotationAxis_1.crossVectors(new THREE.Vector3(0,1,0), rotatedCyl_axis_1);
 			rotationAxis_1.normalize();
