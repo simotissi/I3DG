@@ -25,20 +25,24 @@
                         //do la grandezza dell'immagine da renderizzare
                 document.body.appendChild( renderer.domElement );
 
-                geometry = new THREE.CubeGeometry(1,1,1);
-                material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-                for(var i=0;i<3;i++){
-                    cube.push(new THREE.Mesh(geometry, material));
-                    cube[i].position.y = (offset*i) - 3;
-                    scene.add(cube[i]);
-                }
+                var sphere_geometry = new THREE.SphereGeometry(1, 32, 32);
+                var sphere_material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+                var sphere = new THREE.Mesh( sphere_geometry, sphere_material );
+                sphere.position.set( 0, 2, 0);
+
+                scene.add( sphere );
+
+
+                var cylinder_geometry = new THREE.SphereGeometry(1, 1, 1);
+                var cylinder = new THREE.Mesh( cylinder_geometry, sphere_material );
+                cylinder.position.y = 2;
+                //cylinder.rotation.z = 90* Math.PI/180;
+                sphere.add( cylinder );
                 camera.position.set(0,0,8);
             }
 
             function Render(){
                 requestAnimationFrame( Render );
-                cube[1].rotation.x+=0.01;
-                cube[2].rotation.y+=0.01;
 				renderer.render( scene, camera );
             }
 
