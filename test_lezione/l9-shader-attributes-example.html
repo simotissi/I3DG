@@ -22,29 +22,37 @@
 	<body>
 	
 		<script type="text/x-glsl" id="vertex">
-			attribute float displacement;
+            attribute float displacement;
+            uniform float amplitude;
+            varying vec3 vNormal;
+            varying vec3 vector;
 			
 			void main() {
-		    	vec3 newPosition = position + normal * displacement;
+		    	vec3 newPosition = position + normal * displacement * amplitude;
 				// transforms the vertex from object space to clip space coords		
-				gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
-				
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+                vector = vec3(80,100,80);
+                vNormal = normal * normalize(vector);
+                
 			}
 		</script>
 		
-		<script type="text/x-glsl" id="fragment">
+        <script type="text/x-glsl" id="fragment">
+            uniform float amplitude;
+            varying vec3 vNormal;
 			void main() {
-				gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+                float intensity = amplitude/2.0;
+				gl_FragColor = vec4(vNormal, 1.0);
 			}
 		</script>
 	
 		
 		<script>
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			let scene = new THREE.Scene();
+			let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 			camera.position.set( 0, 0, 100 );
 			
-			var renderer = new THREE.WebGLRenderer({ antialias: true });
+			let renderer = new THREE.WebGLRenderer({ antialias: true });
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.setClearColor( 0xf0f0f0 );
 			document.body.appendChild( renderer.domElement );
@@ -56,11 +64,14 @@
             });
 			
 			// scene code here
+            let uniforms = {
+						amplitude:	{ type: "F", value: 1.0 }
+					};
 					
-			var vs = document.getElementById("vertex").textContent;
-			var fs = document.getElementById("fragment").textContent;
+			let vs = document.getElementById("vertex").textContent;
+			let fs = document.getElementById("fragment").textContent;
 			
-			var sphereMaterial = new THREE.ShaderMaterial({ vertexShader: vs, fragmentShader: fs });
+			let sphereMaterial = new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: vs, fragmentShader: fs });
 			
 			sphere = new THREE.Mesh(
 				new THREE.SphereBufferGeometry( 10, 32, 16 ),
@@ -68,8 +79,8 @@
 				
 			displacement = new Float32Array( sphere.geometry.attributes.position.count );
 			
-			for(var i = 0; i < displacement.length; i++) {
-			   displacement[i]=Math.random() * 30;
+			for(let i = 0; i < displacement.length; i++) {
+			   displacement[i] = Math.random() * 30;
 		    }
 			
 			sphere.geometry.addAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
@@ -86,6 +97,7 @@
 				
 				requestAnimationFrame( render );
 				stats.update();
+                uniforms.amplitude.value = 1.0 + Math.sin(Date.now()*0.001);
 				renderer.render(scene, camera);
 			}
 			
