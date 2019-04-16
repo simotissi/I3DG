@@ -97,8 +97,9 @@
 				
 				requestAnimationFrame( render );
 				stats.update();
-                uniforms.amplitude.value = 1.0 + Math.sin(Date.now()*0.001);
+                uniforms.amplitude.value = 1.0 + Math.sin(Date.now()*0.005);
 				renderer.render(scene, camera);
+                sphere.rotation.y += 0.01;
 			}
 			
 			render();
